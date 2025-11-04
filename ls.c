@@ -86,15 +86,20 @@ void dirwalk(char *dir, void (*fcn)(char*), char *argv[]) {
     bool list = false;
 
     if (argv[1] != NULL) {
-        if (strcmp(argv[1], "-a") == 0) {
-            all = true;
-        }
-        if (strcmp(argv[1], "-l") == 0) {
-            list = true;
-        }
-        if (strcmp(argv[1], "-al") == 0) {
-            all = true;
-            list = true;
+        if (argv[1][0] == '-') {
+            int i = 1;
+            while (argv[1][i] != '\0') {
+                switch (argv[1][i]) {
+                    case 'a':
+                        all = true;
+                        break;
+                    case 'l':
+                        list = true;
+                    default:
+                        break;
+                }
+                i++;
+            }
         }
     }
     
