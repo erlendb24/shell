@@ -4,10 +4,7 @@
 Commands use UNIX names with a 't' at the start to differenciate between the
 global commands in PATH and my own built-in or external program(ls).
 
-Use 
-```shell
-   shell
-``` to start the shell.
+Use "shell" to start the program after using make.
 
 ```shell
    shell
