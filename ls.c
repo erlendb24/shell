@@ -19,11 +19,6 @@ int check_amt_digits(int number) {
     return 1 + check_amt_digits(number/10);
 }
 
-/* prints perms, user, 
- * first char is - for file, d for dir
- * 2 to 4 are file owner perms,
- * 5 to 7 are the group owner perms,
- * and 8 to 10 are for all other users */
 void bitwise_print(struct stat *stat, int constant, char char_to_print) {
     if (stat->st_mode & constant) {
         printf("%c", char_to_print);
@@ -104,8 +99,7 @@ void dirwalk(char *dir, void (*fcn)(char*), char *argv[]) {
     }
     
     if ((dir_fd = opendir(dir)) == NULL) {
-        printf("error");
-        /* if directory empty, print stderr and return*/
+        fprintf(stderr, "%s\n", "Directory is empty!");
     }
 
     while ((dir_p = readdir(dir_fd)) != NULL) {
@@ -115,6 +109,7 @@ void dirwalk(char *dir, void (*fcn)(char*), char *argv[]) {
             }
         }
         if (strlen(dir) + strlen(dir_p->d_name) + 2 > sizeof(name)) {
+            fprintf(stderr, "%s\n", "File name too is long!");
             /* handle error, name too long */
         } else if (list == true) {
             ls_l(dir_p);
