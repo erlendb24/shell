@@ -1,3 +1,3 @@
 all:
-	cc -Wall -Wextra -pedantic shell.c -o shell
-	cc -Wall -Wextra -pedantic ls.c -o tls
+	gcc shell.c -o shell
+	gcc ls.c -o tls
