@@ -2,7 +2,7 @@
 
 ## Commands
 
-´´´shell
+```shell
    tls 
    tls -a
    tls -l
@@ -12,4 +12,4 @@
    tpwd
    techo <string>
    texit
-´´´
+```
