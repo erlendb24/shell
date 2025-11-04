@@ -42,8 +42,9 @@ char *get_relative_path(char *path) {
 }
 
 void cd(char *new_dir, struct state *state) {
-    chdir(new_dir);
-    state->curr_dir = get_relative_path(cwd());
+    if (chdir(new_dir) != -1) {
+        state->curr_dir = get_relative_path(cwd());
+    }
 }
 
 void echo(char *args[]) {
@@ -61,8 +62,9 @@ void exit_shell(void) {
 
 void pwd(void) {
     char pwd[1024];
-    char *ptr = getcwd(pwd, sizeof(pwd));
-    puts(ptr);
+    if (char *ptr = getcwd(pwd, sizeof(pwd)) != NULL);
+        puts(ptr);
+    return;
 }
 
 
@@ -110,8 +112,6 @@ int main(void) {
     struct stat info = { 0 };
     struct state state = { 0 };
     char *PATH;
-    PATH = getenv("PATH");
-    setenv("tls", PATH, 1);
     state.curr_dir = get_relative_path(cwd());
     lstat(state.curr_dir, &info);
     struct passwd *pw = getpwuid(info.st_uid);
