@@ -1,5 +1,8 @@
 # Shell
 
+This is a very simple POSIX-style shell with only a handful of commands
+currently supported. 
+
 ## Commands
 Commands use UNIX names with a 't' at the start to differenciate between the
 global commands in PATH and my own built-in or external program(ls).
