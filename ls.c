@@ -32,7 +32,7 @@ void ls_l(struct dirent *dir) {
     char buf[1024] = { 0 };
     lstat(dir->d_name, &stat);
     struct tm time = { 0 };
-    localtime_r(&stat.st_mtimespec.tv_sec, &time);
+    localtime_r(&stat.st_mtime, &time);
 
     if (S_ISDIR(stat.st_mode)) {
         printf("%c", 'd');
