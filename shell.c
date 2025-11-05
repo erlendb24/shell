@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <pwd.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <string.h>
 
 struct state {
@@ -62,8 +63,10 @@ void exit_shell(void) {
 
 void pwd(void) {
     char pwd[1024];
-    if (char *ptr = getcwd(pwd, sizeof(pwd)) != NULL);
+    char *ptr;
+    if ((ptr = getcwd(pwd, sizeof(pwd))) != NULL) {
         puts(ptr);
+    }
     return;
 }
 
@@ -111,7 +114,6 @@ int main(void) {
     char buf[1024];
     struct stat info = { 0 };
     struct state state = { 0 };
-    char *PATH;
     state.curr_dir = get_relative_path(cwd());
     lstat(state.curr_dir, &info);
     struct passwd *pw = getpwuid(info.st_uid);
