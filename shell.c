@@ -7,9 +7,17 @@
 #include <sys/wait.h>
 #include <string.h>
 
+struct command_node {
+    char *command;
+    struct command_node *next;
+    struct command_node *previous;
+};
+
 struct state {
     char *curr_dir;
     char *user;
+    struct command_node *head;
+    struct command_node *tail;
 };
 
 char *cwd(void) {
@@ -70,10 +78,56 @@ void pwd(void) {
     return;
 }
 
+void print_command_history(struct state *state) {
+    struct command_node *temp = state->head;
+    printf("\n\n%s\n", "print_command_history activated");
+    while (temp != NULL) {
+        printf("%s\n", temp->command);
+        temp = temp->next;
+    }
+}
+
+void add_command(char *command, struct state *state) {
+    struct command_node *new_node = malloc(sizeof(struct command_node));
+    if (new_node == NULL) {
+        perror("Failed to allocate memory for new command node");
+        free(new_node);
+        return;
+    }
+
+    new_node->command = malloc(strlen(command) + 1);
+    if (new_node->command == NULL) {
+        perror("Failed to allocate memory for command");
+        free(new_node);
+        return;
+    }
+    strcpy(new_node->command, command);
+    new_node->next = NULL;
+    new_node->previous = NULL;
+
+    if (state->head == NULL) {
+        state->head = new_node;
+        return;
+    }
+    if (state->tail == NULL) {
+        state->head->next = new_node;
+        new_node->previous = state->head;
+        state->tail = new_node;
+        return;
+    }
+
+    new_node->previous = state->tail;
+    state->tail->next = new_node;
+    state->tail = new_node;
+}
+
 
 void argument_parser(char *arguments, struct state *state) {
     char *args[1000] = { 0 };
     int i = 0;
+    add_command(arguments, state);
+    /*char *arguments_copy = malloc(strlen(arguments));*/
+    /*strlcpy(arguments_copy, arguments, strlen(arguments_copy) + 1);*/
 
     arguments[strcspn(arguments, "\n")] = '\0';
 
@@ -88,6 +142,7 @@ void argument_parser(char *arguments, struct state *state) {
         return;
     }
 
+
     if (strcmp(args[0], "tcd") == 0) {
         cd(args[1], state);
         return;
@@ -99,6 +154,9 @@ void argument_parser(char *arguments, struct state *state) {
         return;
     } else if (strcmp(args[0], "techo") == 0) {
         echo(args);
+        return;
+    } else if (strcmp(args[0], "tprint") == 0) {
+        print_command_history(state);
         return;
     } else {
         if (fork() == 0) {
